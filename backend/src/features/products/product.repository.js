@@ -26,8 +26,10 @@ export default class ProductRepository{
     async getOneProduct(productId){
         try {
             const isProductFound = await ProductModel.findById(productId)
+            console.log(isProductFound)
             if(!isProductFound){
-                throw new Error("product not found")
+                return "product not found"
+
             }
             return isProductFound
         } catch (error) {
@@ -40,7 +42,7 @@ export default class ProductRepository{
         try {
             const products = await ProductModel.find()
             if(!products){
-                throw new Error("no products found")
+                return "no products found"
             }
             return products
         } catch (error) {
@@ -53,7 +55,7 @@ export default class ProductRepository{
         try {
             const products = await ProductModel.find({category:category})
             if(!products){
-                throw new Error("no products found in this category")
+                return "no products found in this category"
             }
             return products
         } catch (error) {
@@ -66,7 +68,7 @@ export default class ProductRepository{
         try {
             const product = await ProductModel.findById(productId)
             if(!product){
-                throw new Error("product not found")
+                return "product not found"
             }
 
             //updating with provided fields
@@ -78,6 +80,7 @@ export default class ProductRepository{
             product.image = newProductDetails.image || product.image;
 
             const updatedProduct = await product.save()
+            // console.log(updatedProduct)
             return updatedProduct
 
         } catch (error) {
@@ -92,11 +95,28 @@ export default class ProductRepository{
             if(!product){
                 throw new Error("product not found")
             }
-
-            await product.remove()
+            await product.deleteOne()
             return("product removed")
         } catch (error) {
             throw new Error("server error")
         }
     }
+    async getFilteredProducts(query, sort, skip, limit) {
+        try {
+          return await ProductModel.find(query)
+            .sort(sort)
+            .skip(skip)
+            .limit(limit);
+        } catch (error) {
+          throw new Error("Error while fetching filtered products");
+        }
+      }
+      
+      async countProducts(query) {
+        try {
+          return await ProductModel.countDocuments(query);
+        } catch (error) {
+          throw new Error("Error while counting products");
+        }
+      }
 }
