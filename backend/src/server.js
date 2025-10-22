@@ -7,6 +7,9 @@ import { connectToMongoDbUsingMongoose } from "./config/mongoose.js"
 import userRouter from "./features/users/user.routes.js"
 import bodyParser from "body-parser"
 import productRouter from "./features/products/product.route.js"
+import reviewRouter from "./features/reviews/review.route.js"
+import cartRouter from "./features/carts/cart.router.js"
+import orderRouter from "./features/orders/order.router.js"
 
 //dotenv initialization
 dotenv.config()
@@ -20,7 +23,9 @@ app.use(bodyParser.json())
 //user apis
 app.use("/api/user",userRouter)
 app.use("/api/product",productRouter)
-
+app.use("/api/review",reviewRouter)
+app.use("/api/cart",cartRouter)
+app.use("/api/order",orderRouter)
 
 //getting the port number from .env file so make sure to create one
 const port = process.env.PORT
